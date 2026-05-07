@@ -11,7 +11,7 @@
         let audio; 
         let currentBgRecord = 'black'; 
         let avatarSound = null; 
-
+        let clock;
         async function initAvatarSound() {
             const audioUrl = "https://cdn.jsdelivr.net/gh/qxx2000/blog@main/img/Cat.wav";
             try {
@@ -221,6 +221,7 @@
         }
 
         function initThreeJS() {
+            clock = new THREE.Clock();
             geometry = new THREE.BufferGeometry();
             geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6 * count), 3));
             geometry.setAttribute('velocity', new THREE.BufferAttribute(new Float32Array(2 * count), 1));
@@ -269,12 +270,17 @@
         }
 
         function animeThreeJS() {
-            if (!isAnimating) return;
+            if (!isAnimating || !clock) return;
+            let delta = clock.getDelta();
+            delta = Math.min(delta, 0.1); 
+            const timeScale = delta / (1 / 60);
+
             for (let i = 0; i < count; i++) {
-                velocityArray[2 * i] += 0.015;
-                velocityArray[2 * i + 1] += 0.015;
-                positionArray[6 * i + 2] += velocityArray[2 * i] + 0.03;
-                positionArray[6 * i + 5] += velocityArray[2 * i + 1];
+                velocityArray[2 * i] += 0.015 * timeScale;
+                velocityArray[2 * i + 1] += 0.015 * timeScale;
+                positionArray[6 * i + 2] += (velocityArray[2 * i] + 0.03) * timeScale;
+                positionArray[6 * i + 5] += velocityArray[2 * i + 1] * timeScale;
+                
                 if (positionArray[6 * i + 2] > 200) {
                     const z = Math.random() * 200 - 200;
                     positionArray[6 * i + 2] = z;
