@@ -11,10 +11,20 @@
         let audio; 
         let currentBgRecord = 'black'; 
         let avatarSound = null; 
-        
-        function initAvatarSound() {
-            avatarSound = new Audio("https://cdn.jsdelivr.net/gh/qxx2000/blog@main/img/Cat.wav");
-            avatarSound.volume = 0.35;
+
+        async function initAvatarSound() {
+            const audioUrl = "https://cdn.jsdelivr.net/gh/qxx2000/blog@main/img/Cat.wav";
+            try {
+                const response = await fetch(audioUrl);
+                const audioBlob = await response.blob();
+                const blobUrl = URL.createObjectURL(audioBlob);
+                avatarSound = new Audio(blobUrl);
+                avatarSound.volume = 0.35;
+            } catch (error) {
+                console.warn("音频预加载失败，降级为传统方式:", error);
+                avatarSound = new Audio(audioUrl);
+                avatarSound.volume = 0.35;
+            }
         }
 
         if (window.requestIdleCallback) {
@@ -29,6 +39,7 @@
         function updateParticlesDisplay() {
             const canvas = document.getElementById('dynamicParticlesCanvas');
             const sCanvas = document.getElementById('shuicheCanvas');
+            
             if (window.isParticlesEnabled) {
                 if (canvas) canvas.style.display = 'block'; 
                 if (sCanvas) sCanvas.style.display = 'block';
