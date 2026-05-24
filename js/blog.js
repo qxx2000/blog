@@ -773,7 +773,7 @@
         document.querySelector('.moon-toggle').addEventListener('click', () => toggleTheme('dark'));
         document.querySelector('.day-toggle-left').addEventListener('click', () => switchBackground('#9F79EE', true));
         document.querySelector('.day-toggle-right').addEventListener('click', () => {
-            const gradient = 'linear-gradient(15.3deg, rgba(111, 71, 133, 1) 14.6%, rgba(232, 129, 166, 1) 29.6%, rgba(237, 237, 183, 1) 42.1%, rgba(244, 166, 215, 1) 56.7%, rgba(154, 219, 232, 1) 68.7%, rgba(238, 226, 159, 1) 84.8%)';
+            const gradient = 'linear-gradient(15.3deg, rgba(111, 71, 133, 1) 5.6%, rgba(232, 129, 166, 1) 19.6%, rgba(237, 237, 183, 1) 42.1%, rgba(244, 166, 215, 1) 63.7%, rgba(154, 219, 232, 1) 78.7%, rgba(238, 226, 159, 1) 96.8%)';
             const darkLayer = 'linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15))';
             switchBackground(`${darkLayer}, ${gradient}`, true);
         });
