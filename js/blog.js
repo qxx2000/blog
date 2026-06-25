@@ -34,8 +34,17 @@
         setTimeout(initAvatarSound, 2000);
     }
 
-    window.isParticlesEnabled = true;
-    window.userToggledParticles = false;
+    window.isParticlesEnabled = localStorage.getItem('isParticlesEnabled') !== null 
+        ? (localStorage.getItem('isParticlesEnabled') === 'true') 
+        : true;
+    window.userToggledParticles = localStorage.getItem('userToggledParticles') !== null 
+        ? (localStorage.getItem('userToggledParticles') === 'true') 
+        : false;
+
+    function saveParticlesState() {
+        localStorage.setItem('isParticlesEnabled', window.isParticlesEnabled);
+        localStorage.setItem('userToggledParticles', window.userToggledParticles);
+    }
 
     function updateParticlesDisplay() {
         const canvas = document.getElementById('dynamicParticlesCanvas');
@@ -67,6 +76,7 @@
             if (e.target && e.target.closest && e.target.closest('#oneko, #oneko-skin-menu, a, button, svg, img, video, .bullet, .link-card, .spotify-card, .play-btn, .theme-toggle, .day-toggle')) { return; }
             window.isParticlesEnabled = !window.isParticlesEnabled;
             window.userToggledParticles = true;
+            saveParticlesState();
             updateParticlesDisplay();
         }
         document.addEventListener('dblclick', toggleParticles);
@@ -171,7 +181,10 @@
             if (renderer) renderer.setClearColor(0x000000, 0);
             changeBackgroundImage('https://cdn.jsdelivr.net/gh/qxx2000/blog@main/img/000.jpg');
             document.documentElement.style.setProperty('--fg', 'black');
-            if (!window.userToggledParticles) window.isParticlesEnabled = false;
+            if (!window.userToggledParticles) {
+                window.isParticlesEnabled = false;
+                saveParticlesState();
+            }
             updateParticlesDisplay();
         } else {
             document.body.classList.remove('light');
@@ -179,7 +192,10 @@
             if (renderer) renderer.setClearColor(0x000000, 0);
             changeBackgroundImage('black', true);
             document.documentElement.style.setProperty('--fg', 'white');
-            if (!window.userToggledParticles) window.isParticlesEnabled = true;
+            if (!window.userToggledParticles) {
+                window.isParticlesEnabled = true;
+                saveParticlesState();
+            }
             updateParticlesDisplay();
         }
     }
@@ -190,7 +206,10 @@
         document.body.classList.remove('dark');
         if (renderer) renderer.setClearColor(0x000000, 0);
         document.documentElement.style.setProperty('--fg', 'black');
-        if (!window.userToggledParticles) window.isParticlesEnabled = false;
+        if (!window.userToggledParticles) {
+            window.isParticlesEnabled = false;
+            saveParticlesState();
+        }
         updateParticlesDisplay();
     }
 
@@ -880,6 +899,7 @@
             case event.key.toLowerCase() === 'p':
                 window.isParticlesEnabled = !window.isParticlesEnabled;
                 window.userToggledParticles = true;
+                saveParticlesState();
                 updateParticlesDisplay();
                 break;
             case event.key === 'Enter':
@@ -891,14 +911,7 @@
     });
 
     const style = document.createElement('style');
-    style.textContent = `
-        .glitch-text { position: relative; display: inline-block; }
-        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
-        .glitch-text.active::before { animation: glitch-1 0.5s cubic-bezier(.25, .46, .45, .94) both infinite; color: #0ff; transform: translateX(-0.5px); }
-        .glitch-text.active::after { animation: glitch-2 0.5s cubic-bezier(.25, .46, .45, .94) reverse both infinite; color: #f0f; transform: translateX(0.5px); }
-        @keyframes glitch-1 { 0% { opacity: 0.75; transform: translate(-1px, 1px); } 50% { opacity: 0.5; transform: translate(0.5px, -0.5px); } 100% { opacity: 0.75; transform: translate(-1px, 1px); } }
-        @keyframes glitch-2 { 0% { opacity: 0.75; transform: translate(1px, -1px); } 50% { opacity: 0.5; transform: translate(-0.5px, 0.5px); } 100% { opacity: 0.75; transform: translate(1px, -1px); } }
-    `;
+    style.textContent = `.glitch-text{position:relative;display:inline-block}.glitch-text::before,.glitch-text::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none}.glitch-text.active::before{animation:glitch-1 .5s cubic-bezier(.25,.46,.45,.94) both infinite;color:#0ff;transform:translateX(-0.5px)}.glitch-text.active::after{animation:glitch-2 .5s cubic-bezier(.25,.46,.45,.94) reverse both infinite;color:#f0f;transform:translateX(0.5px)}@keyframes glitch-1{0%{opacity:0.75;transform:translate(-1px,1px)}50%{opacity:0.5;transform:translate(-0.5px,-0.5px)}100%{opacity:0.75;transform:translate(-1px,1px)}}@keyframes glitch-2{0%{opacity:0.75;transform:translate(1px,-1px)}50%{opacity:0.5;transform:translate(-0.5px,0.5px)}100%{opacity:0.75;transform:translate(1px,-1px)}}`;
     document.head.appendChild(style);
     const linkCards = document.querySelectorAll('.link-card');
     linkCards.forEach(card => {
