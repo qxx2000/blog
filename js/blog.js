@@ -34,17 +34,9 @@
         setTimeout(initAvatarSound, 2000);
     }
 
-    window.isParticlesEnabled = localStorage.getItem('isParticlesEnabled') !== null 
-        ? (localStorage.getItem('isParticlesEnabled') === 'true') 
-        : true;
-    window.userToggledParticles = localStorage.getItem('userToggledParticles') !== null 
-        ? (localStorage.getItem('userToggledParticles') === 'true') 
-        : false;
-
-    function saveParticlesState() {
-        localStorage.setItem('isParticlesEnabled', window.isParticlesEnabled);
-        localStorage.setItem('userToggledParticles', window.userToggledParticles);
-    }
+    const userParticlePref = localStorage.getItem('user_particle_preference');
+    window.userToggledParticles = (userParticlePref !== null);
+    window.isParticlesEnabled = window.userToggledParticles ? (userParticlePref === 'on') : true;
 
     function updateParticlesDisplay() {
         const canvas = document.getElementById('dynamicParticlesCanvas');
@@ -76,7 +68,7 @@
             if (e.target && e.target.closest && e.target.closest('#oneko, #oneko-skin-menu, a, button, svg, img, video, .bullet, .link-card, .spotify-card, .play-btn, .theme-toggle, .day-toggle')) { return; }
             window.isParticlesEnabled = !window.isParticlesEnabled;
             window.userToggledParticles = true;
-            saveParticlesState();
+            localStorage.setItem('user_particle_preference', window.isParticlesEnabled ? 'on' : 'off');
             updateParticlesDisplay();
         }
         document.addEventListener('dblclick', toggleParticles);
@@ -183,7 +175,6 @@
             document.documentElement.style.setProperty('--fg', 'black');
             if (!window.userToggledParticles) {
                 window.isParticlesEnabled = false;
-                saveParticlesState();
             }
             updateParticlesDisplay();
         } else {
@@ -194,7 +185,6 @@
             document.documentElement.style.setProperty('--fg', 'white');
             if (!window.userToggledParticles) {
                 window.isParticlesEnabled = true;
-                saveParticlesState();
             }
             updateParticlesDisplay();
         }
@@ -208,7 +198,6 @@
         document.documentElement.style.setProperty('--fg', 'black');
         if (!window.userToggledParticles) {
             window.isParticlesEnabled = false;
-            saveParticlesState();
         }
         updateParticlesDisplay();
     }
@@ -899,7 +888,7 @@
             case event.key.toLowerCase() === 'p':
                 window.isParticlesEnabled = !window.isParticlesEnabled;
                 window.userToggledParticles = true;
-                saveParticlesState();
+                localStorage.setItem('user_particle_preference', window.isParticlesEnabled ? 'on' : 'off');
                 updateParticlesDisplay();
                 break;
             case event.key === 'Enter':
