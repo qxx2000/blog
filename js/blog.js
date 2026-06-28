@@ -181,7 +181,7 @@
             document.body.classList.remove('light');
             document.body.classList.add('dark');
             if (renderer) renderer.setClearColor(0x000000, 0);
-            changeBackgroundImage('black', true);
+            changeBackgroundImage('#0e0e0e', true);
             document.documentElement.style.setProperty('--fg', 'white');
             if (!window.userToggledParticles) {
                 window.isParticlesEnabled = true;
