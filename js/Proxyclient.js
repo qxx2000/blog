@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const extBadges = getExtensionBadges(asset.name);
       const rawUrl = asset.browser_download_url;
-      const proxyUrl = `https://99z.top/${rawUrl}`;
+      const proxyUrl = `https://proxy.nbb.qzz.io/${rawUrl}`;
 
       const tr = document.createElement('tr');
       tr.className = ""; 
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = e.target.closest('.copy-link-btn');
     if (copyBtn) {
       const rawUrl = copyBtn.getAttribute('data-url');
-      const proxyUrl = `https://99z.top/${rawUrl}`;
+      const proxyUrl = `https://proxy.nbb.qzz.io/${rawUrl}`;
       
       navigator.clipboard.writeText(proxyUrl).then(() => {
         const originalHTML = copyBtn.innerHTML;
